@@ -1,4 +1,3 @@
-import axios from "axios";
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 // import { useNavigate } from "react-router-dom";
 
@@ -13,8 +12,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({children}: { children: ReactNode}) => {
     const [user, setUser] = useState<any>(null);
-    // const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
-    // const navigate = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem("jwtToken");
@@ -39,18 +36,6 @@ export const AuthProvider = ({children}: { children: ReactNode}) => {
         }
     }, []);
 
-    const fetchUser = async (token: string) => {
-        try {
-            const { data } = await axios.get("http:locahost:3000/users/me", {
-                headers: {Authorization: `Bearer ${token}`},
-            });
-           setUser(data);
-        } catch (error) {
-            console.log("Error occured while fetching user: ", error);
-            setUser(null);
-        }
-    };
-
    
 
     const login = (token: string) => {
@@ -71,8 +56,6 @@ export const AuthProvider = ({children}: { children: ReactNode}) => {
     )
 
 }
-
-// export const useAuth = () => useContext(AuthContext);
 
 export function useAuth() {
     const context = useContext(AuthContext);

@@ -14,7 +14,6 @@ const Login = () => {
         if (token) {
             auth?.login(token);
             window.history.replaceState({}, document.title, "/dashboard");
-            // localStorage.setItem("jwtToken", token);// not a safe place, will change it
             window.location.href = "/dashboard";
         }
     }, []);
