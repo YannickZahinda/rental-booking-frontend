@@ -1,16 +1,29 @@
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "../../common/Button";
 import { useAuth } from "@/context/AuthContext";
+import { FaGoogle } from "react-icons/fa";
 
 const Header = () => {
   const location = useLocation();
   const auth = useAuth();
+
+  const isLoggedIn = auth.isAuthenticated();
 
   const isActive = (path: string) => {
     return location.pathname === path
       ? "text-gray-900"
       : "text-gray 500 hover:text-gray-900";
   };
+
+  const handleGoogleLogin = async () => {
+    const API_URL = "http://localhost:3000/auth/google/callback";
+    try {
+      window.location.href = API_URL;
+    } catch (error) {
+      console.log("Google login error $$: ", error);
+      
+    }
+  }
 
   return (
     <header className="bg-white shadow-sm">
@@ -45,12 +58,15 @@ const Header = () => {
             </Link>
           </nav>
           <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
-            <Link to="/auth/signin">
-              <Button variant="ghost">Sign in</Button>
-            </Link>
-            <Link to="/auth/signup">
-              <Button>Sign up</Button>
-            </Link>
+            {!isLoggedIn ? (
+              <button onClick={handleGoogleLogin} className="bg-blue-500 text-white px-4 py-2 rounded hover:cursor-pointer">
+                <FaGoogle className="mr-2" /> Continue with google 
+              </button>
+            ):(
+              <Link to="/dashboard">
+                <Button>Dashboard</Button>
+              </Link>
+            )}
           </div>
         </div>
       </div>
