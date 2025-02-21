@@ -4,7 +4,7 @@ import clsx from "clsx";
 type ButtonVariant = 'primary' | 'secondary' | 'ghost';
 
 const variantClasses: Record<ButtonVariant, string> = {
-    primary: "border-transparent text-white bg-indigo-600 hover:bg-indigo-700",
+    primary: "border-transparent text-white bg-black hover:bg-gray-700 hover:cursor-pointer",
     secondary: "border-transparent text-indigo-700 bg-indigo-100 hover:bg-indigo-200",
     ghost: "border-gray-300 text-gray-700 bg-white hover:bg-gray-50"
 }

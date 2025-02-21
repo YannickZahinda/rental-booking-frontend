@@ -1,3 +1,4 @@
+import BookingForm from "../../components/common/BookingForm";
 import PropertyCard from "../../components/features/properties/PropertyCard";
 
 const featuredProperties = [
@@ -31,7 +32,7 @@ const featuredProperties = [
     description:
       "Sleek 1-bedroom apartment in the heart of KIGALI, close to major attractions.",
     price: "$250/night",
-    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7FFYJ-9LixZjQrVS1dro5IpghnajhZrd3kQ&s",
+    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7FFYJ-9LixZjQrVS1dro5IpghnajhZrd3kQ&ss",
   },
 ];
 
@@ -48,6 +49,7 @@ const Home = () => {
           ))}
         </div>
       </div>
+      <BookingForm />
     </main>
   );
 };
