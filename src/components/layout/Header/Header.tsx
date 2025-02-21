@@ -1,8 +1,10 @@
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "../../common/Button";
+import { useAuth } from "@/context/AuthContext";
 
 const Header = () => {
   const location = useLocation();
+  const auth = useAuth();
 
   const isActive = (path: string) => {
     return location.pathname === path
