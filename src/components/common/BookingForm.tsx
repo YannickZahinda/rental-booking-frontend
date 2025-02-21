@@ -14,7 +14,7 @@ const properties = [
 ];
 
 const BookingForm = () => {
-  const [date, setDate] = useState<Date | null>(null);
+  const [date, setDate] = useState<Date | undefined>(undefined);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
