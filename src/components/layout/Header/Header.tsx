@@ -59,8 +59,8 @@ const Header = () => {
           </nav>
           <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
             {!isLoggedIn ? (
-              <button onClick={handleGoogleLogin} className="bg-blue-500 text-white px-4 py-2 rounded hover:cursor-pointer">
-                <FaGoogle className="mr-2" /> Continue with google 
+              <button onClick={handleGoogleLogin} className="bg-blue-500 flex items-center text-white px-4 py-2 rounded hover:cursor-pointer">
+                <FaGoogle className="mr-2" />  <p>Continue with google </p>
               </button>
             ):(
               <Link to="/dashboard">
