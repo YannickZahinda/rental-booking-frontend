@@ -201,7 +201,6 @@ const HostDashboard = () => {
           ) : (
             <div className="space-y-4">
               {bookings.map((booking, index) => {
-                // Determine status color and text
                 let statusColor = "";
                 let statusText = "";
 
@@ -233,7 +232,6 @@ const HostDashboard = () => {
                         <button
                           className="p-1 hover:bg-gray-100 rounded"
                           onClick={() => {
-                            // Toggle dropdown visibility
                             const dropdown = document.getElementById(`dropdown-${booking.id}`);
                             dropdown?.classList.toggle("hidden");
                           }}
