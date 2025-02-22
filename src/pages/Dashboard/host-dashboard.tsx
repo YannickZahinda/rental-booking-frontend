@@ -2,18 +2,9 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { MapPinIcon } from "lucide-react";
-import {
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "../../components/ui/CardElements";
+import { CardContent, CardHeader, CardTitle } from "../../components/ui/CardElements";
 import Card from "@/components/ui/Card";
-import {
-  Tabs,
-  TabsContent,
-  TabList,
-  TabsTrigger,
-} from "../../components/ui/tabs";
+import { Tabs, TabsContent, TabList, TabsTrigger } from "../../components/ui/tabs";
 import { CalendarIcon, DollarSignIcon, UsersIcon } from "lucide-react";
 import CreatePropertyForm from "@/components/common/CreatePropertyForm";
 
@@ -22,7 +13,6 @@ const HostDashboard = () => {
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [showForm, setShowForm] = useState(false);
 
   interface Property {
     id: string;
@@ -48,7 +38,7 @@ const HostDashboard = () => {
       }
     };
     fetchProperties();
-  });
+  }, []);
 
   if (loading) {
     return <div>Loading properties....</div>;
@@ -63,19 +53,12 @@ const HostDashboard = () => {
       <h1 className="text-3xl font-bold mb-6">Welcome {user?.name}</h1>
       <p className="mb-6">GLAD YOU MADE IT UP TO HERE !!!</p>
 
-      <Button
-        className="bg-blue-500 text-white mb-6"
-        onClick={() => setShowForm(!showForm)}
-      >
-        {showForm ? "Cancel" : "Create Property"}
-        {showForm && <CreatePropertyForm onClose={() => setShowForm(false)} />}
-      </Button>
-
       <Tabs defaultValue="overview" className="space-y-4">
         <TabList>
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="bookings">Bookings</TabsTrigger>
           <TabsTrigger value="earnings">Earnings</TabsTrigger>
+          <TabsTrigger value="create">Create Property</TabsTrigger> {/* New Tab */}
         </TabList>
 
         <TabsContent value="overview" className="space-y-4">
@@ -109,14 +92,10 @@ const HostDashboard = () => {
               </CardContent>
             </Card>
           </div>
-          {/* Display fetched properties */}
           <h2 className="text-2xl font-semibold mt-8">Your Properties</h2>
-          <div className="gird grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {properties.map((property) => (
-              <Card
-                key={property.id}
-                className="transition-all hover:shadow-lg"
-              >
+              <Card key={property.id} className="transition-all hover:shadow-lg">
                 <CardHeader>
                   <CardTitle>{property.title}</CardTitle>
                 </CardHeader>
@@ -125,8 +104,7 @@ const HostDashboard = () => {
                     <MapPinIcon className="mr-2 h-4 w-4" /> {property.location}
                   </p>
                   <p className="flex items-center">
-                    <DollarSignIcon className="mr-2 h-4 w-4" />{" "}
-                    {property.price_per_night}
+                    <DollarSignIcon className="mr-2 h-4 w-4" /> {property.price_per_night}
                   </p>
                   <p className="flex items-center">
                     <UsersIcon className="mr-2 h-4 w-4" /> 0 guests
@@ -147,8 +125,7 @@ const HostDashboard = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="flex items-center">
-                    <CalendarIcon className="mr-2 h-4 w-4" /> May 1, 2025 - May
-                    7, 2025
+                    <CalendarIcon className="mr-2 h-4 w-4" /> May 1, 2025 - May 7, 2025
                   </p>
                   <p className="flex items-center">
                     <UsersIcon className="mr-2 h-4 w-4" /> 4 guests
@@ -202,6 +179,10 @@ const HostDashboard = () => {
               </CardContent>
             </Card>
           </div>
+        </TabsContent>
+
+        <TabsContent value="create" className="space-y-4">
+          <CreatePropertyForm />
         </TabsContent>
       </Tabs>
 

@@ -6,7 +6,6 @@ const API_URL = "http://localhost:3000/auth/google/callback";
 
 const Login = () => {
   const auth = useAuth();
-  // const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -25,7 +24,6 @@ const Login = () => {
 
   const handleGoogleLogin = async () => {
     try {
-      // const res = await axios.get(API_URL);
       window.location.href = API_URL;
     } catch (error) {
       console.log("Google login error $$$$$$$: ", error);

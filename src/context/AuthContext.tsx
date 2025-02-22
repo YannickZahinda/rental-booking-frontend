@@ -32,12 +32,6 @@ interface User {
   bookings?: Booking[];
 }
 
-// interface AuthResponse {
-//   accessToken: string;
-//   refreshToken: string;
-//   user: User;
-// }
-
 interface AuthContextType {
   user: User | null;
   login: (token: string) => void;
