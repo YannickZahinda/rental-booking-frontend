@@ -1,14 +1,78 @@
+import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { Button } from "@/components/ui/button";
-import { CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../components/ui/CardElements";
+import {
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../../components/ui/CardElements";
 import { Label } from "@radix-ui/react-label";
 import { Input } from "@/components/ui/input";
 import Card from "@/components/ui/Card";
 import { Tabs, TabsContent, TabList, TabsTrigger } from "@/components/ui/tabs";
-import { CalendarIcon, HomeIcon, MapPinIcon, SearchIcon, StarIcon, UserIcon } from "lucide-react";
+import {
+  CalendarIcon,
+  HomeIcon,
+  MapPinIcon,
+  SearchIcon,
+  StarIcon,
+  UserIcon,
+} from "lucide-react";
 
 const RenterDashboard = () => {
   const { user, logout } = useAuth();
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [loading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  interface Property {
+    id: number;
+    title: string;
+    location: string;
+    price_per_night: number;
+  }
+
+  interface Booking {
+    id: number;
+    property: Property; // Nested property object
+    renter: {
+      id: number;
+      name: string;
+      email: string;
+    };
+    check_in: string;
+    check_out: string;
+    status: "pending" | "confirmed" | "canceled";
+  }
+
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/bookings");
+        if (!response.ok) {
+          throw new Error("Failed to fetch bookings");
+        }
+        const data = await response.json();
+        setBookings(data);
+      } catch (error) {
+        setError((error as Error).message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchBookings();
+  }, []);
+
+  if (loading) {
+    return <div>Loading bookings...</div>;
+  }
+
+  if (error) {
+    return <div className="text-red-500">Error: {error}</div>;
+  }
 
   return (
     <div className="container mx-auto p-6">
@@ -26,7 +90,9 @@ const RenterDashboard = () => {
           <Card className="transition-all hover:shadow-lg">
             <CardHeader>
               <CardTitle>Find Your Next Stay</CardTitle>
-              <CardDescription>Search for properties by location, dates, and more.</CardDescription>
+              <CardDescription>
+                Search for properties by location, dates, and more.
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <form className="space-y-4">
@@ -55,10 +121,12 @@ const RenterDashboard = () => {
             </CardContent>
           </Card>
 
-          <h2 className="text-2xl font-semibold mt-8 mb-4">Featured Properties</h2>
+          <h2 className="text-2xl font-semibold mt-8 mb-4">
+            Featured Properties
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[1, 2, 3].map((property) => (
-              <Card  className="transition-all hover:shadow-lg" key={property}>
+              <Card className="transition-all hover:shadow-lg" key={property}>
                 <CardHeader>
                   <CardTitle>Luxury Villa {property}</CardTitle>
                   <CardDescription>Santa Barbara, California</CardDescription>
@@ -85,21 +153,28 @@ const RenterDashboard = () => {
         <TabsContent value="bookings" className="space-y-4">
           <h2 className="text-2xl font-semibold">My Bookings</h2>
           <div className="space-y-4">
-            {[1, 2].map((booking) => (
-              <Card  className="transition-all hover:shadow-lg" key={booking}>
+            {bookings.map((booking, index) => (
+              <Card className="transition-all hover:shadow-lg" key={index}>
                 <CardHeader>
-                  <CardTitle>Booking #{booking}</CardTitle>
-                  <CardDescription>Luxury Villa {booking}</CardDescription>
+                  <CardTitle>Booking #{index + 1}</CardTitle>
+                  <CardDescription>
+                    {booking.property
+                      ? booking.property.title
+                      : "Unknown Property"}
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <p className="flex items-center">
-                    <CalendarIcon className="mr-2 h-4 w-4" /> May 1, 2025 - May 7, 2025
+                    <CalendarIcon className="mr-2 h-4 w-4" />{" "}
+                    {new Date(booking.check_in).toLocaleDateString()} -{" "}
+                    {new Date(booking.check_out).toLocaleDateString()}
                   </p>
                   <p className="flex items-center">
-                    <UserIcon className="mr-2 h-4 w-4" /> 4 guests
+                    <UserIcon className="mr-2 h-4 w-4" /> 0 guests
                   </p>
                   <p className="flex items-center">
-                    <MapPinIcon className="mr-2 h-4 w-4" /> Santa Barbara, California
+                    <MapPinIcon className="mr-2 h-4 w-4" />{" "}
+                    {booking.property.location || "Unknown Location"}
                   </p>
                 </CardContent>
                 <CardFooter>
@@ -116,7 +191,7 @@ const RenterDashboard = () => {
           <h2 className="text-2xl font-semibold">My Favorite Properties</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[1, 2, 3].map((property) => (
-              <Card  className="transition-all hover:shadow-lg" key={property}>
+              <Card className="transition-all hover:shadow-lg" key={property}>
                 <CardHeader>
                   <CardTitle>Cozy Cabin {property}</CardTitle>
                   <CardDescription>Aspen, Colorado</CardDescription>
