@@ -127,7 +127,7 @@ const HostDashboard = () => {
         </Button>
       </div>
 
-      <h1 className="text-3xl font-bold mb-6">Welcome {user?.name}</h1>
+      <h1 className="text-3xl font-bold mb-6">Welcome {user?.name} you are a host</h1>
 
       <Tabs defaultValue="overview" className="space-y-4">
         <TabList>
