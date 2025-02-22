@@ -1,50 +1,97 @@
-# React + TypeScript + Vite
+# Rental Ease
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Rental Ease is a property rental platform that allows users to book properties if they are renters and create new property listings if they are hosts. The application provides a seamless experience for both renters and property owners, ensuring a smooth booking and listing process.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### For Renters:
+- Browse available properties.
+- View detailed property descriptions, locations, and pricing.
+- Book properties for a specified duration.
+- Secure payment integration (if applicable).
 
-## Expanding the ESLint configuration
+### For Hosts:
+- Create new property listings with details such as title, location, description, and price per night.
+- Manage property listings (edit or remove properties).
+- View booking requests from renters.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### General:
+- User authentication and authorization.
+- Google Authentication for seamless sign-in.
+- Responsive and user-friendly interface.
+- Secure API communication.
 
-- Configure the top-level `parserOptions` property like this:
+## Tech Stack
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+### Frontend:
+- React 19 (Vite.js)
+- TypeScript
+- Tailwind CSS
+- Radix UI
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### Backend:
+- NestJS (API-based backend)
+- SQL (Database)
+- JWT Authentication
+- Google OAuth for authentication
+- Cloud Storage for image uploads
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## Getting Started
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+### Prerequisites
+Ensure you have the following installed:
+- Node.js (Latest LTS version)
+- npm or yarn
+- Git
+
+### Installation
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/YannickZahinda/rental-ease.git
+   cd rental-ease
+   ```
+2. Install dependencies:
+   ```sh
+   npm install
+   ```
+3. Set up environment variables:
+   - Create a `.env` file in the root directory and add necessary API keys, backend URLs, and Google OAuth credentials.
+
+4. Start the development server:
+   ```sh
+   npm run dev
+   ```
+
+### Backend Setup
+The backend repository is available here: [Rental Ease Backend](https://github.com/YannickZahinda/rental-book)
+Follow the instructions in the backend repo's README to set up the API.
+
+## Usage
+- Sign up or log in using Google Authentication.
+- If you are a **renter**, browse properties and make bookings.
+- If you are a **host**, create and manage property listings.
+- Enjoy a seamless rental experience!
+
+## Contributing
+Contributions are welcome! To contribute:
+1. Fork the repository.
+2. Create a new branch:
+   ```sh
+   git checkout -b feature-name
+   ```
+3. Commit your changes:
+   ```sh
+   git commit -m "Add new feature"
+   ```
+4. Push to your branch:
+   ```sh
+   git push origin feature-name
+   ```
+5. Open a pull request.
+
+## License
+This project is licensed under the MIT License.
+
+## Contact
+For inquiries or collaboration, reach out to [Yannick Zahinda](https://github.com/YannickZahinda).
+
