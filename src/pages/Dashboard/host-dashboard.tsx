@@ -5,7 +5,7 @@ import Card from "@/components/ui/Card";
 import { Tabs, TabsContent, TabList, TabsTrigger } from "../../components/ui/tabs";
 import { CalendarIcon, DollarSignIcon, UsersIcon} from "lucide-react";
 
-const Dashboard = () => {
+const HostDashboard = () => {
   const { user, logout } = useAuth();
 
   return (
@@ -129,4 +129,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default HostDashboard;

@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 // import { Children } from "react";
 import { JSX } from "react/jsx-runtime";
 
-const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+const ProtectedRoute = ({ children, role }: { children: JSX.Element; role?: "host" | "renter" }) => {
     // const { token } = useAuth();
     const { user, isAuthenticated } = useAuth();
     const [isLoading, setIsLoading] = useState(true);
@@ -28,8 +28,13 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
         console.log(" User not authenticated, redirecting to login...");
         return <Navigate to="/login" />
     }
+
     
     console.log("✅ Authenticated user:", user);
+    if(role && user?.role !== role) {
+        return <Navigate to={user?.role === "host" ? "/host-dashboard" : "/renter-dashboard"} />
+    }
+    
     return children;
 }
 

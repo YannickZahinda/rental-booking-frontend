@@ -18,8 +18,8 @@ const Login = () => {
 
       auth?.login(token);
 
-      window.history.replaceState({}, document.title, "/dashboard");
-      window.location.href = "/dashboard";
+      window.history.replaceState({}, document.title, "/host-dashboard");
+      window.location.href = "/host-dashboard";
     }
   }, [auth]);
 

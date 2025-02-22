@@ -2,11 +2,10 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Navigate,
 } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import Login from "./pages/Login/Login";
-import Dashboard from "./pages/Dashboard/host-dashboard";
+import HostDashboard from "./pages/Dashboard/host-dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/Home/Home";
 import PropertiesPage from "./pages/PropertiesPage/PropertiesPage";
@@ -14,6 +13,7 @@ import PropertyDetailsPage from "./pages/PropertyDetailsPage/PropertyDetailsPage
 import About from "./pages/About/About";
 import ContactPage from "./pages/ContactPage/ContactPage";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
+import RenterDashboard from "./pages/Dashboard/renter-dashboard";
 // import { AuthProvider } from "./context/AuthContext";
 
 function App() {
@@ -28,10 +28,18 @@ function App() {
       </Route>
       <Route path="/login" element={<Login />} />
       <Route
-        path="/dashboard"
+        path="/host-dashboard"
         element={
-          <ProtectedRoute>
-            <Dashboard />
+          <ProtectedRoute role="host">
+            <HostDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/renter-dashboard"
+        element={
+          <ProtectedRoute role="renter">
+            <RenterDashboard />
           </ProtectedRoute>
         }
       />

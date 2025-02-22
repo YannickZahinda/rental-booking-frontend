@@ -6,7 +6,9 @@ import { FaGoogle } from "react-icons/fa";
 const Header = () => {
   const location = useLocation();
   const auth = useAuth();
-  const userRole = auth.user?.role;
+  const userRole = auth.user?.role
+  const { user } = useAuth()
+
   const isLoggedIn = auth.isAuthenticated();
 
   const isActive = (path: string) => {
@@ -19,6 +21,7 @@ const Header = () => {
     const API_URL = "http://localhost:3000/auth/google/callback";
     try {
       window.location.href = API_URL;
+    
     } catch (error) {
       console.log("Google login error $$: ", error);
       
