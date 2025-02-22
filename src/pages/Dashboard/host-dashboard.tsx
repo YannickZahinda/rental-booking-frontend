@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { Button } from "@/components/ui/button";
-import { LogOut } from "lucide-react";
+import { LogOut, MoreVertical } from "lucide-react";
 import { MapPinIcon } from "lucide-react";
 import {
   CardContent,
@@ -62,15 +62,14 @@ const HostDashboard = () => {
       }
     };
     fetchProperties();
+
     const fetchBookings = async () => {
       try {
         const response = await fetch("http://localhost:3000/bookings");
         if (!response.ok) {
           throw new Error("Failed to fetch bookings");
         }
-
         const data = await response.json();
-        console.log("The bookings: ", data);
         setBookings(data);
       } catch (error) {
         setError((error as Error).message);
@@ -80,6 +79,32 @@ const HostDashboard = () => {
     };
     fetchBookings();
   }, []);
+
+  const updateBookingStatus = async (id: number, status: "pending" | "confirmed" | "canceled") => {
+    try {
+      const response = await fetch(`http://localhost:3000/bookings/${id}/status`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update booking status");
+      }
+
+      const updatedBooking = await response.json();
+
+      setBookings((prevBookings) =>
+        prevBookings.map((booking) =>
+          booking.id === id ? updatedBooking : booking
+        )
+      );
+    } catch (error) {
+      setError((error as Error).message);
+    }
+  };
 
   if (loading) {
     return <div>Loading properties....</div>;
@@ -146,10 +171,7 @@ const HostDashboard = () => {
           <h2 className="text-2xl font-semibold mt-8">Your Properties</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {properties.map((property) => (
-              <Card
-                key={property.id}
-                className="transition-all hover:shadow-lg"
-              >
+              <Card key={property.id} className="transition-all hover:shadow-lg">
                 <CardHeader>
                   <CardTitle>{property.title}</CardTitle>
                 </CardHeader>
@@ -179,6 +201,7 @@ const HostDashboard = () => {
           ) : (
             <div className="space-y-4">
               {bookings.map((booking, index) => {
+                // Determine status color and text
                 let statusColor = "";
                 let statusText = "";
 
@@ -189,7 +212,7 @@ const HostDashboard = () => {
                     break;
                   case "confirmed":
                     statusColor = "bg-green-500";
-                    statusText = "Approved";
+                    statusText = "Confirmed";
                     break;
                   case "canceled":
                     statusColor = "bg-red-500";
@@ -202,18 +225,45 @@ const HostDashboard = () => {
 
                 return (
                   <Card className="transition-all hover:shadow-lg" key={index}>
-                    <CardHeader>
-                      <CardTitle className="flex items-center justify-between">
-                        <span>
-                          Booking for{" "}
-                          {booking.property?.title || "Unknown Property"}
-                        </span>
-                        <span
-                          className={`px-3 py-1 rounded-full text-sm font-semibold ${statusColor}`}
-                        >
-                          {statusText}
-                        </span>
+                    <CardHeader className="flex items-center justify-between">
+                      <CardTitle>
+                        Booking for {booking.property?.title || "Unknown Property"}
                       </CardTitle>
+                      <div className="relative">
+                        <button
+                          className="p-1 hover:bg-gray-100 rounded"
+                          onClick={() => {
+                            // Toggle dropdown visibility
+                            const dropdown = document.getElementById(`dropdown-${booking.id}`);
+                            dropdown?.classList.toggle("hidden");
+                          }}
+                        >
+                          <MoreVertical className="h-4 w-4" />
+                        </button>
+                        <div
+                          id={`dropdown-${booking.id}`}
+                          className="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg z-10"
+                        >
+                          <button
+                            className="block w-full px-4 py-2 text-sm text-left hover:bg-gray-100"
+                            onClick={() => updateBookingStatus(booking.id, "pending")}
+                          >
+                            Mark as Pending
+                          </button>
+                          <button
+                            className="block w-full px-4 py-2 text-sm text-left hover:bg-gray-100"
+                            onClick={() => updateBookingStatus(booking.id, "confirmed")}
+                          >
+                            Mark as Approved
+                          </button>
+                          <button
+                            className="block w-full px-4 py-2 text-sm text-left hover:bg-gray-100"
+                            onClick={() => updateBookingStatus(booking.id, "canceled")}
+                          >
+                            Mark as Canceled
+                          </button>
+                        </div>
+                      </div>
                     </CardHeader>
                     <CardContent>
                       <p className="flex items-center">
@@ -225,8 +275,15 @@ const HostDashboard = () => {
                         <UsersIcon className="mr-2 h-4 w-4" /> 0 guests
                       </p>
                       <p className="flex items-center">
-                        <DollarSignIcon className="mr-2 h-4 w-4" /> Total:
-                        $3,000
+                        <DollarSignIcon className="mr-2 h-4 w-4" /> Total: $3,000
+                      </p>
+                      <p className="flex items-center">
+                        Status:{" "}
+                        <span
+                          className={`px-3 py-1 rounded-full text-sm font-semibold ${statusColor}`}
+                        >
+                          {statusText}
+                        </span>
                       </p>
                     </CardContent>
                   </Card>
