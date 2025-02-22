@@ -6,7 +6,7 @@ import { FaGoogle } from "react-icons/fa";
 const Header = () => {
   const location = useLocation();
   const auth = useAuth();
-
+  const userRole = auth.user?.role;
   const isLoggedIn = auth.isAuthenticated();
 
   const isActive = (path: string) => {
@@ -63,11 +63,11 @@ const Header = () => {
                 <FaGoogle className="mr-2" />  <p>Continue with google </p>
               </button>
             ):(
-              <Link to="/dashboard">
+              <Link to={ userRole === "host" ? "/host-dashboard": "/renter-dashboard"}>
                 <Button>Dashboard</Button>
               </Link>
             )}
-          </div>
+          </div> 
         </div>
       </div>
     </header>

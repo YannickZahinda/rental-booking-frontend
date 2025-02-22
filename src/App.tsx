@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import Login from "./pages/Login/Login";
-import Dashboard from "./pages/Dashboard/Dashboard";
+import Dashboard from "./pages/Dashboard/host-dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/Home/Home";
 import PropertiesPage from "./pages/PropertiesPage/PropertiesPage";
