@@ -1,12 +1,60 @@
+import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { Button } from "@/components/ui/button";
-import { CardContent, CardHeader, CardTitle } from "../../components/ui/CardElements";
+import { MapIcon, MapPinIcon } from "lucide-react";
+import {
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../../components/ui/CardElements";
 import Card from "@/components/ui/Card";
-import { Tabs, TabsContent, TabList, TabsTrigger } from "../../components/ui/tabs";
-import { CalendarIcon, DollarSignIcon, UsersIcon} from "lucide-react";
+import {
+  Tabs,
+  TabsContent,
+  TabList,
+  TabsTrigger,
+} from "../../components/ui/tabs";
+import { CalendarIcon, DollarSignIcon, UsersIcon } from "lucide-react";
 
 const HostDashboard = () => {
   const { user, logout } = useAuth();
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [loading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  interface Property {
+    id: string;
+    title: string;
+    description: string;
+    location: string;
+    price_per_night: number;
+  }
+
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/properties");
+        if (!response.ok) {
+          throw new Error("Failed to fetch properties");
+        }
+        const data = await response.json();
+        setProperties(data);
+      } catch (error) {
+        setError((error as Error).message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchProperties();
+  });
+
+  if (loading) {
+    return <div>Loading properties....</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div className="container mx-auto p-6">
@@ -51,19 +99,46 @@ const HostDashboard = () => {
               </CardContent>
             </Card>
           </div>
+          {/* Display fetched properties */}
+          <h2 className="text-2xl font-semibold mt-8">Your Properties</h2>
+          <div className="gird grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {properties.map((property) => (
+              <Card
+                key={property.id}
+                className="transition-all hover:shadow-lg"
+              >
+                <CardHeader>
+                  <CardTitle>{property.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="flex items-center">
+                    <MapPinIcon className="mr-2 h-4 w-4" /> {property.location}
+                  </p>
+                  <p className="flex items-center">
+                    <DollarSignIcon className="mr-2 h-4 w-4" />{" "}
+                    {property.price_per_night}
+                  </p>
+                  <p className="flex items-center">
+                    <UsersIcon className="mr-2 h-4 w-4" /> 0 guests
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </TabsContent>
 
         <TabsContent value="bookings" className="space-y-4">
           <h2 className="text-2xl font-semibold">Current Bookings</h2>
           <div className="space-y-4">
             {[1, 2, 3].map((booking) => (
-              <Card  className="transition-all hover:shadow-lg" key={booking}>
+              <Card className="transition-all hover:shadow-lg" key={booking}>
                 <CardHeader>
                   <CardTitle>Booking #{booking}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="flex items-center">
-                    <CalendarIcon className="mr-2 h-4 w-4" /> May 1, 2025 - May 7, 2025
+                    <CalendarIcon className="mr-2 h-4 w-4" /> May 1, 2025 - May
+                    7, 2025
                   </p>
                   <p className="flex items-center">
                     <UsersIcon className="mr-2 h-4 w-4" /> 4 guests
