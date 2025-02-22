@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { Button } from "@/components/ui/button";
-import { MapIcon, MapPinIcon } from "lucide-react";
+import { MapPinIcon } from "lucide-react";
 import {
   CardContent,
   CardHeader,
@@ -15,12 +15,14 @@ import {
   TabsTrigger,
 } from "../../components/ui/tabs";
 import { CalendarIcon, DollarSignIcon, UsersIcon } from "lucide-react";
+import CreatePropertyForm from "@/components/common/CreatePropertyForm";
 
 const HostDashboard = () => {
   const { user, logout } = useAuth();
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showForm, setShowForm] = useState(false);
 
   interface Property {
     id: string;
@@ -60,6 +62,14 @@ const HostDashboard = () => {
     <div className="container mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6">Welcome {user?.name}</h1>
       <p className="mb-6">GLAD YOU MADE IT UP TO HERE !!!</p>
+
+      <Button
+        className="bg-blue-500 text-white mb-6"
+        onClick={() => setShowForm(!showForm)}
+      >
+        {showForm ? "Cancel" : "Create Property"}
+        {showForm && <CreatePropertyForm onClose={() => setShowForm(false)} />}
+      </Button>
 
       <Tabs defaultValue="overview" className="space-y-4">
         <TabList>
